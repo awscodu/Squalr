@@ -2,13 +2,16 @@
     x:Class="Squalr.View.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:avalonDock="http://schemas.xceed.com/wpf/xaml/avalondock"
-    xmlns:content="clr-namespace:SqualrCore.Content;assembly=SqualrCore"
-    xmlns:converters="clr-namespace:SqualrCore.Source.Mvvm.Converters;assembly=SqualrCore"
-    xmlns:coreView="clr-namespace:SqualrCore.View;assembly=SqualrCore"
-    xmlns:docking="clr-namespace:SqualrCore.Source.Docking;assembly=SqualrCore"
+    xmlns:avalonDock="clr-namespace:Squalr.Theme;assembly=Squalr.Theme"
+    xmlns:content="clr-namespace:Squalr.Content"
+    xmlns:converters="clr-namespace:Squalr.Source.Mvvm.Converters"
+    xmlns:coreView="clr-namespace:Squalr.View"
+    xmlns:docking="clr-namespace:Squalr.Source.Docking"
     xmlns:intr="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:layout="clr-namespace:Squalr.Theme.Layout;assembly=Squalr.Theme"
+    xmlns:layoutControls="clr-namespace:Squalr.Theme.Controls;assembly=Squalr.Theme"
     xmlns:shell="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:theme="clr-namespace:Squalr.Theme.Themes;assembly=Squalr.Theme"
     xmlns:view="clr-namespace:Squalr.View"
     x:Name="SqualrWindow"
     Title="Squalr"
@@ -295,6 +298,11 @@
                             IsCheckable="True"
                             IsChecked="{Binding DisassemblyViewModel.IsVisible, Mode=TwoWay}"
                             Style="{Binding}" />
+                        <shell:MenuItem
+                            Header="Code Tracer"
+                            IsCheckable="True"
+                            IsChecked="{Binding CodeTracerViewModel.IsVisible, Mode=TwoWay}"
+                            Style="{Binding}" />
                     </shell:MenuItem>
                 </shell:Menu>
             </shell:Grid>
@@ -368,9 +376,9 @@
                 AnchorablesSource="{Binding DockingViewModel.Tools, Source={StaticResource ViewModelLocator}}"
                 Background="{StaticResource SqualrColorGray20}">
                 <!--  Theme  -->
-                <avalonDock:DockingManager.Theme>
-                    <avalonDock:DarkTheme />
-                </avalonDock:DockingManager.Theme>
+                <avalonDock:DockingManager.ThemeBase>
+                    <theme:DarkTheme />
+                </avalonDock:DockingManager.ThemeBase>
 
                 <!--  All Dockable Windows  -->
                 <avalonDock:DockingManager.LayoutItemTemplateSelector>
@@ -378,7 +386,7 @@
                         <!--  Error Message When Missing Data Template (KEEP AS FIRST IN THIS LIST)  -->
                         <view:ViewTemplateSelector.DataTemplateErrorViewTemplate>
                             <shell:DataTemplate>
-                                <coreView:DataTemplateError />
+                                <view:DataTemplateError />
                             </shell:DataTemplate>
                         </view:ViewTemplateSelector.DataTemplateErrorViewTemplate>
                         <!--  Project Explorer  -->
@@ -450,19 +458,19 @@
                         <!--  Process Selector  -->
                         <view:ViewTemplateSelector.ProcessSelectorViewTemplate>
                             <shell:DataTemplate>
-                                <coreView:ProcessSelector />
+                                <view:ProcessSelector />
                             </shell:DataTemplate>
                         </view:ViewTemplateSelector.ProcessSelectorViewTemplate>
                         <!--  Property Viewer  -->
                         <view:ViewTemplateSelector.PropertyViewerViewTemplate>
                             <shell:DataTemplate>
-                                <coreView:PropertyViewer />
+                                <view:PropertyViewer />
                             </shell:DataTemplate>
                         </view:ViewTemplateSelector.PropertyViewerViewTemplate>
                         <!--  Output  -->
                         <view:ViewTemplateSelector.OutputViewTemplate>
                             <shell:DataTemplate>
-                                <coreView:Output />
+                                <view:Output />
                             </shell:DataTemplate>
                         </view:ViewTemplateSelector.OutputViewTemplate>
                         <!--  Debugger  -->
@@ -471,6 +479,12 @@
                                 <view:Disassembly />
                             </shell:DataTemplate>
                         </view:ViewTemplateSelector.DisassemblyViewTemplate>
+                        <!--  Code Tracer  -->
+                        <view:ViewTemplateSelector.CodeTracerViewTemplate>
+                            <shell:DataTemplate>
+                                <view:CodeTracer />
+                            </shell:DataTemplate>
+                        </view:ViewTemplateSelector.CodeTracerViewTemplate>
                     </view:ViewTemplateSelector>
                 </avalonDock:DockingManager.LayoutItemTemplateSelector>
 
@@ -479,7 +493,7 @@
                     <docking:PanesStyleSelector>
                         <!--  General Docking Tools Style  -->
                         <docking:PanesStyleSelector.ToolStyle>
-                            <shell:Style TargetType="{x:Type avalonDock:LayoutAnchorableItem}">
+                            <shell:Style TargetType="{x:Type layoutControls:LayoutAnchorableItem}">
                                 <shell:Setter Property="Title" Value="{Binding Model.Title}" />
                                 <shell:Setter Property="IconSource" Value="{Binding Model.IconSource}" />
                                 <shell:Setter Property="Visibility" Value="{Binding Model.IsVisible, Mode=TwoWay, Converter={StaticResource BooleanToHiddenConverter}}" />
@@ -492,10 +506,10 @@
                 </avalonDock:DockingManager.LayoutItemContainerStyleSelector>
 
                 <!--  Layout Style  -->
-                <avalonDock:LayoutRoot>
+                <layout:LayoutRoot>
                     <!--  Docking Group for All Windows  -->
-                    <avalonDock:LayoutPanel />
-                </avalonDock:LayoutRoot>
+                    <layout:LayoutPanel />
+                </layout:LayoutRoot>
             </avalonDock:DockingManager>
 
             <!--  Status Bar  -->

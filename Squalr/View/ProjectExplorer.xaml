@@ -2,8 +2,8 @@
     x:Class="Squalr.View.ProjectExplorer"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:content="clr-namespace:SqualrCore.Content;assembly=SqualrCore"
-    xmlns:converters="clr-namespace:SqualrCore.Source.Mvvm.Converters;assembly=SqualrCore"
+    xmlns:content="clr-namespace:Squalr.Content"
+    xmlns:converters="clr-namespace:Squalr.Source.Mvvm.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:intr="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -40,6 +40,27 @@
             BorderBrush="{StaticResource SqualrColorWhite}"
             Foreground="{StaticResource SqualrColorWhite}">
             <MenuItem Command="{Binding ProjectExplorerViewModel.ToggleSelectionActivationCommand, Source={StaticResource ViewModelLocator}}" Header="Toggle Selection" />
+            <Separator Visibility="{Binding ProjectExplorerViewModel.IsSelectionAddress, Converter={StaticResource BooleanToVisibilityConverter}, Source={StaticResource ViewModelLocator}}" />
+            <MenuItem
+                Command="{Binding PointerScannerViewModel.PointerScanCommand, Source={StaticResource ViewModelLocator}}"
+                Header="Pointer Scan for this Address"
+                Visibility="{Binding ProjectExplorerViewModel.IsSelectionAddress, Converter={StaticResource BooleanToVisibilityConverter}, Source={StaticResource ViewModelLocator}}" />
+            <Separator Visibility="{Binding ProjectExplorerViewModel.IsSelectionAddress, Converter={StaticResource BooleanToVisibilityConverter}, Source={StaticResource ViewModelLocator}}" />
+            <MenuItem
+                Command="{Binding CodeTracerViewModel.FindWhatWritesCommand, Source={StaticResource ViewModelLocator}}"
+                CommandParameter="{Binding .}"
+                Header="Find Code that Writes to this Address"
+                Visibility="{Binding ProjectExplorerViewModel.IsSelectionAddress, Converter={StaticResource BooleanToVisibilityConverter}, Source={StaticResource ViewModelLocator}}" />
+            <MenuItem
+                Command="{Binding CodeTracerViewModel.FindWhatReadsCommand, Source={StaticResource ViewModelLocator}}"
+                CommandParameter="{Binding .}"
+                Header="Find Code that Reads from this Address"
+                Visibility="{Binding ProjectExplorerViewModel.IsSelectionAddress, Converter={StaticResource BooleanToVisibilityConverter}, Source={StaticResource ViewModelLocator}}" />
+            <MenuItem
+                Command="{Binding CodeTracerViewModel.FindWhatAccessesCommand, Source={StaticResource ViewModelLocator}}"
+                CommandParameter="{Binding .}"
+                Header="Find Code that Reads or Writes to this Address"
+                Visibility="{Binding ProjectExplorerViewModel.IsSelectionAddress, Converter={StaticResource BooleanToVisibilityConverter}, Source={StaticResource ViewModelLocator}}" />
             <Separator />
             <MenuItem Command="{Binding ProjectExplorerViewModel.DeleteSelectionCommand, Source={StaticResource ViewModelLocator}}" Header="Delete Selection" />
             <Separator />

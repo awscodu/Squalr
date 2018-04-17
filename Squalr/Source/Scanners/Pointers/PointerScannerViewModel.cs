@@ -1,7 +1,7 @@
 ﻿namespace Squalr.Source.Scanners.Pointers
 {
     using GalaSoft.MvvmLight.CommandWpf;
-    using SqualrCore.Source.Docking;
+    using Squalr.Source.Docking;
     using System;
     using System.Threading;
     using System.Threading.Tasks;
@@ -56,6 +56,11 @@
 
             DockingViewModel.GetInstance().RegisterViewModel(this);
         }
+
+        /// <summary>
+        /// Gets a command to start the pointer scan on a specific project item.
+        /// </summary>
+        public ICommand PointerScanCommand { get; private set; }
 
         /// <summary>
         /// Gets a command to start the pointer scan.

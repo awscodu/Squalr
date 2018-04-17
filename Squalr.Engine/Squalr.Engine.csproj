@@ -1,0 +1,77 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <RootNamespace>Squalr.Engine</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Zachary Canann</Authors>
+    <Company>Anathena Inc.</Company>
+    <Description>This is the engine that drives Squalr. This supports AnyCPU/x86/x64 Windows platforms.
+This engine allows for modification of memory, disassembling, assembling, debugging, hooking, and other powerful features.
+</Description>
+    <Copyright></Copyright>
+    <PackageTags></PackageTags>
+    <NeutralLanguage />
+    <Version>1.0.5</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Architecture\**" />
+    <Compile Remove="Debugger\**" />
+    <Compile Remove="Input\**" />
+    <Compile Remove="Internal\**" />
+    <Compile Remove="Processes\**" />
+    <Compile Remove="Scripting\**" />
+    <Compile Remove="Utils\**" />
+    <Compile Remove="VirtualMemory\**" />
+    <EmbeddedResource Remove="Architecture\**" />
+    <EmbeddedResource Remove="Debugger\**" />
+    <EmbeddedResource Remove="Input\**" />
+    <EmbeddedResource Remove="Internal\**" />
+    <EmbeddedResource Remove="Processes\**" />
+    <EmbeddedResource Remove="Scripting\**" />
+    <EmbeddedResource Remove="Utils\**" />
+    <EmbeddedResource Remove="VirtualMemory\**" />
+    <None Remove="Architecture\**" />
+    <None Remove="Debugger\**" />
+    <None Remove="Input\**" />
+    <None Remove="Internal\**" />
+    <None Remove="Processes\**" />
+    <None Remove="Scripting\**" />
+    <None Remove="Utils\**" />
+    <None Remove="VirtualMemory\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Squalr.Engine.Architecture\Squalr.Engine.Architecture.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\Squalr.Engine.DataTypes\Squalr.Engine.DataTypes.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\Squalr.Engine.Debugger\Squalr.Engine.Debugger.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\Squalr.Engine.Graphics\Squalr.Engine.Graphics.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\Squalr.Engine.Hook\Squalr.Engine.Hook.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\Squalr.Engine.Input\Squalr.Engine.Input.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\Squalr.Engine.Internal.HookServer\Squalr.Engine.Internal.HookServer.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\Squalr.Engine.Internal.TaskScheduler\Squalr.Engine.Internal.TaskScheduler.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\Squalr.Engine.Memory\Squalr.Engine.Memory.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\Squalr.Engine.Memory.Clr\Squalr.Engine.Memory.Clr.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\Squalr.Engine.Memory.Jvm\Squalr.Engine.Memory.Jvm.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\Squalr.Engine.Networking\Squalr.Engine.Networking.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\Squalr.Engine.Output\Squalr.Engine.Output.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\Squalr.Engine.Processes\Squalr.Engine.Processes.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\Squalr.Engine.Scripting\Squalr.Engine.Scripting.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\Squalr.Engine.SpeedManipulator\Squalr.Engine.SpeedManipulator.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\Squalr.Engine.Unrandomizer\Squalr.Engine.Unrandomizer.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\Squalr.Engine.Utils\Squalr.Engine.Utils.csproj" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+</Project>

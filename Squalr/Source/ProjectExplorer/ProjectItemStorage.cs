@@ -1,13 +1,12 @@
 ﻿namespace Squalr.Source.ProjectExplorer
 {
     using Microsoft.Win32;
+    using Squalr.Engine.Output;
+    using Squalr.Engine.Utils.DataStructures;
     using Squalr.Properties;
-    using SqualrCore.Source.Analytics;
-    using SqualrCore.Source.Controls;
-    using SqualrCore.Source.Output;
-    using SqualrCore.Source.ProjectItems;
-    using SqualrCore.Source.Utils.DataStructures;
-    using SqualrCore.Source.Utils.Extensions;
+    using Squalr.Source.Controls;
+    using Squalr.Source.ProjectItems;
+    using Squalr.Source.Utils.Extensions;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -112,7 +111,7 @@
             {
                 if (!File.Exists(this.ProjectFilePath))
                 {
-                    OutputViewModel.GetInstance().Log(OutputViewModel.LogLevel.Error, "Unable to locate project.");
+                    Output.Log(LogLevel.Error, "Unable to locate project.");
                     return;
                 }
 
@@ -126,7 +125,7 @@
             catch (Exception ex)
             {
                 this.ProjectFilePath = String.Empty;
-                OutputViewModel.GetInstance().Log(OutputViewModel.LogLevel.Error, "Unable to open project", ex.ToString());
+                Output.Log(LogLevel.Error, "Unable to open project", ex.ToString());
                 return;
             }
 
@@ -148,8 +147,7 @@
             }
             catch (Exception ex)
             {
-                OutputViewModel.GetInstance().Log(OutputViewModel.LogLevel.Warn, "Unable to open hotkey profile", ex);
-                AnalyticsService.GetInstance().SendEvent(AnalyticsService.AnalyticsAction.General, ex);
+                Output.Log(LogLevel.Warn, "Unable to open hotkey profile", ex);
                 return;
             }
         }
@@ -185,7 +183,7 @@
             {
                 if (!File.Exists(filename))
                 {
-                    OutputViewModel.GetInstance().Log(OutputViewModel.LogLevel.Error, "Unable to locate project.");
+                    Output.Log(LogLevel.Error, "Unable to locate project.");
                     return;
                 }
 
@@ -205,8 +203,7 @@
             }
             catch (Exception ex)
             {
-                OutputViewModel.GetInstance().Log(OutputViewModel.LogLevel.Error, "Unable to import project", ex);
-                AnalyticsService.GetInstance().SendEvent(AnalyticsService.AnalyticsAction.General, ex);
+                Output.Log(LogLevel.Error, "Unable to import project", ex);
                 return;
             }
 
@@ -229,8 +226,7 @@
             }
             catch (Exception ex)
             {
-                OutputViewModel.GetInstance().Log(OutputViewModel.LogLevel.Warn, "Unable to open hotkey profile", ex);
-                AnalyticsService.GetInstance().SendEvent(AnalyticsService.AnalyticsAction.General, ex);
+                Output.Log(LogLevel.Warn, "Unable to open hotkey profile", ex);
                 return;
             }
 
@@ -275,8 +271,7 @@
             }
             catch (Exception ex)
             {
-                OutputViewModel.GetInstance().Log(OutputViewModel.LogLevel.Fatal, "Unable to save project", ex);
-                AnalyticsService.GetInstance().SendEvent(AnalyticsService.AnalyticsAction.General, ex);
+                Output.Log(LogLevel.Fatal, "Unable to save project", ex);
                 return;
             }
 
@@ -294,8 +289,7 @@
             }
             catch (Exception ex)
             {
-                OutputViewModel.GetInstance().Log(OutputViewModel.LogLevel.Error, "Unable to save hotkey profile", ex);
-                AnalyticsService.GetInstance().SendEvent(AnalyticsService.AnalyticsAction.General, ex);
+                Output.Log(LogLevel.Error, "Unable to save hotkey profile", ex);
                 return;
             }
         }
@@ -312,11 +306,11 @@
                 {
                     if (String.IsNullOrEmpty(this.ProjectFilePath) || !Directory.Exists(Path.GetDirectoryName(this.ProjectFilePath)))
                     {
-                        OutputViewModel.GetInstance().Log(OutputViewModel.LogLevel.Info, "Please save the project before exporting");
+                        Output.Log(LogLevel.Info, "Please save the project before exporting");
                         return;
                     }
 
-                    OutputViewModel.GetInstance().Log(OutputViewModel.LogLevel.Info, "Project export starting");
+                    Output.Log(LogLevel.Info, "Project export starting");
 
                     String folderPath = Path.Combine(Path.GetDirectoryName(this.ProjectFilePath), "Export");
                     Directory.CreateDirectory(folderPath);
@@ -347,12 +341,11 @@
                 }
                 catch (Exception ex)
                 {
-                    OutputViewModel.GetInstance().Log(OutputViewModel.LogLevel.Fatal, "Unable to complete export project", ex);
-                    AnalyticsService.GetInstance().SendEvent(AnalyticsService.AnalyticsAction.General, ex);
+                    Output.Log(LogLevel.Fatal, "Unable to complete export project", ex);
                     return;
                 }
 
-                OutputViewModel.GetInstance().Log(OutputViewModel.LogLevel.Info, "Project export complete");
+                Output.Log(LogLevel.Info, "Project export complete");
             });
         }
 
