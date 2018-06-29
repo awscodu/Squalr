@@ -2,6 +2,7 @@
   
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <LangVersion>7.2</LangVersion>
     <RootNamespace>Squalr.Engine</RootNamespace>
   </PropertyGroup>
 
@@ -9,65 +10,50 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Zachary Canann</Authors>
     <Company>Anathena Inc.</Company>
-    <Description>This is the engine that drives Squalr. This supports AnyCPU/x86/x64 Windows platforms.
-This engine allows for modification of memory, disassembling, assembling, debugging, hooking, and other powerful features.
-</Description>
+    <Description>Core assembly for all Squalr assemblies. For specific functionality (scripting, scanning, debugging, etc), be sure to include the relevant package.</Description>
     <Copyright></Copyright>
     <PackageTags></PackageTags>
     <NeutralLanguage />
-    <Version>1.0.5</Version>
+    <Version>2.3.1</Version>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Architecture\**" />
     <Compile Remove="Debugger\**" />
     <Compile Remove="Input\**" />
-    <Compile Remove="Internal\**" />
-    <Compile Remove="Processes\**" />
     <Compile Remove="Scripting\**" />
-    <Compile Remove="Utils\**" />
     <Compile Remove="VirtualMemory\**" />
     <EmbeddedResource Remove="Architecture\**" />
     <EmbeddedResource Remove="Debugger\**" />
     <EmbeddedResource Remove="Input\**" />
-    <EmbeddedResource Remove="Internal\**" />
-    <EmbeddedResource Remove="Processes\**" />
     <EmbeddedResource Remove="Scripting\**" />
-    <EmbeddedResource Remove="Utils\**" />
     <EmbeddedResource Remove="VirtualMemory\**" />
     <None Remove="Architecture\**" />
     <None Remove="Debugger\**" />
     <None Remove="Input\**" />
-    <None Remove="Internal\**" />
-    <None Remove="Processes\**" />
     <None Remove="Scripting\**" />
-    <None Remove="Utils\**" />
     <None Remove="VirtualMemory\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Squalr.Engine.Architecture\Squalr.Engine.Architecture.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\Squalr.Engine.DataTypes\Squalr.Engine.DataTypes.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\Squalr.Engine.Debugger\Squalr.Engine.Debugger.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\Squalr.Engine.Graphics\Squalr.Engine.Graphics.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\Squalr.Engine.Hook\Squalr.Engine.Hook.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\Squalr.Engine.Input\Squalr.Engine.Input.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\Squalr.Engine.Internal.HookServer\Squalr.Engine.Internal.HookServer.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\Squalr.Engine.Internal.TaskScheduler\Squalr.Engine.Internal.TaskScheduler.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\Squalr.Engine.Memory\Squalr.Engine.Memory.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\Squalr.Engine.Memory.Clr\Squalr.Engine.Memory.Clr.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\Squalr.Engine.Memory.Jvm\Squalr.Engine.Memory.Jvm.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\Squalr.Engine.Networking\Squalr.Engine.Networking.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\Squalr.Engine.Output\Squalr.Engine.Output.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\Squalr.Engine.Processes\Squalr.Engine.Processes.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\Squalr.Engine.Scripting\Squalr.Engine.Scripting.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\Squalr.Engine.SpeedManipulator\Squalr.Engine.SpeedManipulator.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\Squalr.Engine.Unrandomizer\Squalr.Engine.Unrandomizer.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\Squalr.Engine.Utils\Squalr.Engine.Utils.csproj" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0-rc1" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0-rc1" />
+    <PackageReference Include="System.Drawing.Common" Version="4.5.0-rc1" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0-rc1" />
   </ItemGroup>
 
   <ItemGroup>

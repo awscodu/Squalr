@@ -2,29 +2,32 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>7.2</LangVersion>
+    <Version>2.3.1</Version>
+    <Description>Squalr engine component for scripting. This library exposes a set of APIs to allow for C# scripts to leverage the other Squalr engine components.</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="CS-Script.Core" Version="1.0.0.4-HotFix" />
-    <PackageReference Include="System.CodeDom" Version="4.5.0-preview1-26216-02" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.8.2" />
+    <PackageReference Include="System.CodeDom" Version="4.5.0-rc1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Squalr.Engine.Architecture\Squalr.Engine.Architecture.csproj" />
-    <ProjectReference Include="..\Squalr.Engine.DataTypes\Squalr.Engine.DataTypes.csproj" />
-    <ProjectReference Include="..\Squalr.Engine.Debugger\Squalr.Engine.Debugger.csproj" />
-    <ProjectReference Include="..\Squalr.Engine.Graphics\Squalr.Engine.Graphics.csproj" />
-    <ProjectReference Include="..\Squalr.Engine.Hook\Squalr.Engine.Hook.csproj" />
+    <ProjectReference Include="..\Squalr.Engine.Debugger\Squalr.Engine.Debuggers.csproj" />
     <ProjectReference Include="..\Squalr.Engine.Memory\Squalr.Engine.Memory.csproj" />
-    <ProjectReference Include="..\Squalr.Engine.Output\Squalr.Engine.Output.csproj" />
-    <ProjectReference Include="..\Squalr.Engine.Processes\Squalr.Engine.Processes.csproj" />
-    <ProjectReference Include="..\Squalr.Engine.SpeedManipulator\Squalr.Engine.SpeedManipulator.csproj" />
-    <ProjectReference Include="..\Squalr.Engine.Unrandomizer\Squalr.Engine.Unrandomizer.csproj" />
-    <ProjectReference Include="..\Squalr.Engine.Utils\Squalr.Engine.Utils.csproj" />
+    <ProjectReference Include="..\Squalr.Engine.Scanning\Squalr.Engine.Scanning.csproj" />
+    <ProjectReference Include="..\Squalr.Engine\Squalr.Engine.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,8 +41,8 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="Templates\ScriptTemplate.cs">
-      <DependentUpon>ScriptTemplate.tt</DependentUpon>
+    <Compile Update="Templates\ModScriptTemplate.cs">
+      <DependentUpon>ModScriptTemplate.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -54,8 +57,8 @@
       <LastGenOutput>GraphicsInjectionTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
-    <None Update="Templates\ScriptTemplate.tt">
-      <LastGenOutput>ScriptTemplate.cs</LastGenOutput>
+    <None Update="Templates\ModScriptTemplate.tt">
+      <LastGenOutput>ModScriptTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
   </ItemGroup>

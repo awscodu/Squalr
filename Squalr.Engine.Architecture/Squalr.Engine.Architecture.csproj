@@ -2,6 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>7.2</LangVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>2.3.1</Version>
+    <Description>Squalr engine component for assemblers and disassemblers. Currently, this supports x86 and x64 processors.</Description>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,11 +30,10 @@
 
   <ItemGroup>
     <PackageReference Include="SharpDisasmStandard" Version="1.0.1" />
-    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0-preview1-26216-02" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Squalr.Engine.Utils\Squalr.Engine.Utils.csproj" />
+    <ProjectReference Include="..\Squalr.Engine\Squalr.Engine.csproj" />
   </ItemGroup>
 
 </Project>

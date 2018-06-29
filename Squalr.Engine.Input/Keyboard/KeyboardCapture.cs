@@ -1,9 +1,8 @@
 ﻿namespace Squalr.Engine.Input.Keyboard
 {
-    using Output;
+    using Logging;
     using SharpDX;
     using SharpDX.DirectInput;
-    using Squalr.Engine.Output;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -176,11 +175,11 @@
                 this.Keyboard = new Keyboard(this.DirectInput);
                 this.Keyboard.Acquire();
 
-                Output.Log(LogLevel.Info, "Keyboard device found");
+                Logger.Log(LogLevel.Info, "Keyboard device found");
             }
             catch (Exception ex)
             {
-                Output.Log(LogLevel.Error, "Unable to acquire keyboard device", ex);
+                Logger.Log(LogLevel.Error, "Unable to acquire keyboard device", ex);
             }
         }
     }

@@ -1,11 +1,13 @@
-﻿namespace Squalr.Engine.Architecture.Assembler
+﻿namespace Squalr.Engine.Architecture.Assemblers
 {
     using Squalr.Engine.Utils.Extensions;
     using System;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using System.Text;
+    using System.Threading;
 
     /// <summary>
     /// The Nasm assembler for x86/64.
@@ -13,30 +15,44 @@
     internal class NasmAssembler : IAssembler
     {
         /// <summary>
-        /// The 32 bit proxy service executable
-        /// </summary>
-        private const String ExecutablePath = "Library/nasm.exe";
-
-        /// <summary>
         /// Assemble the specified assembly code.
         /// </summary>
-        /// <param name="isProcess32Bit">Whether or not the assembly is in the context of a 32 bit program.</param>
         /// <param name="assembly">The assembly code.</param>
+        /// <param name="isProcess32Bit">Whether or not the assembly is in the context of a 32 bit program.</param>
         /// <returns>An array of bytes containing the assembly code.</returns>
-        public AssemblerResult Assemble(Boolean isProcess32Bit, String assembly)
+        public AssemblerResult Assemble(String assembly, Boolean isProcess32Bit)
         {
             // Assemble and return the code
-            return this.Assemble(isProcess32Bit, assembly, IntPtr.Zero);
+            return this.Assemble(assembly, isProcess32Bit, 0);
         }
+
+        /// <summary>
+        /// The path to the nasm binary. This is searched for recursively and cached. This is done since NuGet can move the relative location of the file.
+        /// </summary>
+        private Lazy<String> nasmPath = new Lazy<String>(() =>
+            {
+                String currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                DirectoryInfo directoryInfo = new DirectoryInfo(currentDirectory);
+
+                // When deployed via NuGet, we lose folder structure and must recurse a couple directories higher
+                if (directoryInfo.Parent?.Name == "lib")
+                {
+                    currentDirectory = directoryInfo.Parent?.Parent?.FullName;
+                }
+
+                return Directory.EnumerateFiles(currentDirectory, "nasm.exe", SearchOption.AllDirectories).FirstOrDefault();
+            },
+            LazyThreadSafetyMode.ExecutionAndPublication
+        );
 
         /// <summary>
         /// Assemble the specified assembly code at a base address.
         /// </summary>
-        /// <param name="isProcess32Bit">Whether or not the assembly is in the context of a 32 bit program.</param>
         /// <param name="assembly">The assembly code.</param>
+        /// <param name="isProcess32Bit">Whether or not the assembly is in the context of a 32 bit program.</param>
         /// <param name="baseAddress">The address where the code is rebased.</param>
         /// <returns>An array of bytes containing the assembly code.</returns>
-        public AssemblerResult Assemble(Boolean isProcess32Bit, String assembly, IntPtr baseAddress)
+        public AssemblerResult Assemble(String assembly, Boolean isProcess32Bit, UInt64 baseAddress)
         {
             AssemblerResult result = new AssemblerResult();
             String preamble = "org 0x" + baseAddress.ToString("X") + Environment.NewLine;
@@ -58,7 +74,7 @@
                 String outputFilePath = Path.Combine(Path.GetTempPath(), "SqualrAssembly" + Guid.NewGuid() + ".bin");
 
                 File.WriteAllText(assemblyFilePath, assembly);
-                String exePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), NasmAssembler.ExecutablePath);
+                String exePath = this.nasmPath.Value;
                 StringBuilder buildOutput = new StringBuilder();
                 ProcessStartInfo startInfo = new ProcessStartInfo(exePath);
                 startInfo.Arguments = "-f bin -o " + NasmAssembler.Escape(outputFilePath) + " " + NasmAssembler.Escape(assemblyFilePath);
@@ -80,7 +96,7 @@
 
                 if (File.Exists(outputFilePath))
                 {
-                    result.Data = File.ReadAllBytes(outputFilePath);
+                    result.Bytes = File.ReadAllBytes(outputFilePath);
                 }
             }
             catch (Exception ex)

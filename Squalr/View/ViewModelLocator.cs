@@ -3,18 +3,10 @@
     using Source.DotNetExplorer;
     using Source.Main;
     using Source.Results;
-    using Source.Scanners.ChangeCounter;
-    using Source.Scanners.InputCorrelator;
-    using Source.Scanners.LabelThresholder;
-    using Source.Scanners.ManualScanner;
-    using Source.Scanners.Pointers;
-    using Source.Scanners.ValueCollector;
     using Source.Snapshots;
     using Squalr.Properties;
-    using Squalr.Source.ActionScheduler;
     using Squalr.Source.ChangeLog;
     using Squalr.Source.Debugger;
-    using Squalr.Source.Debugger.Disassembly;
     using Squalr.Source.Docking;
     using Squalr.Source.Editors.HotkeyEditor;
     using Squalr.Source.Editors.OffsetEditor;
@@ -25,6 +17,8 @@
     using Squalr.Source.ProcessSelector;
     using Squalr.Source.ProjectExplorer;
     using Squalr.Source.PropertyViewer;
+    using Squalr.Source.Scanning;
+    using Squalr.Source.Tasks;
 
     /// <summary>
     /// This class contains static references to all the view models in the
@@ -53,11 +47,11 @@
         /// <summary>
         /// Gets the Action Scheduler view model.
         /// </summary>
-        public ActionSchedulerViewModel ActionSchedulerViewModel
+        public TaskTrackerViewModel TaskTrackerViewModel
         {
             get
             {
-                return ActionSchedulerViewModel.GetInstance();
+                return TaskTrackerViewModel.GetInstance();
             }
         }
 
@@ -333,6 +327,28 @@
             get
             {
                 return CodeTracerViewModel.GetInstance();
+            }
+        }
+
+        /// <summary>
+        /// Gets the New Project Dialog view model.
+        /// </summary>
+        public NewProjectDialogViewModel NewProjectDialogViewModel
+        {
+            get
+            {
+                return NewProjectDialogViewModel.GetInstance();
+            }
+        }
+
+        /// <summary>
+        /// Gets the Open Project Dialog view model.
+        /// </summary>
+        public OpenProjectDialogViewModel OpenProjectDialogViewModel
+        {
+            get
+            {
+                return OpenProjectDialogViewModel.GetInstance();
             }
         }
     }

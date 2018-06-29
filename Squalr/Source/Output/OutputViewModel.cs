@@ -1,9 +1,9 @@
 ﻿namespace Squalr.Source.Output
 {
     using GalaSoft.MvvmLight.CommandWpf;
-    using Squalr.Engine.Output;
+    using Squalr.Engine.Logging;
+    using Squalr.Engine.Utils.Extensions;
     using Squalr.Source.Docking;
-    using Squalr.Source.Utils.Extensions;
     using System;
     using System.IO;
     using System.Linq;
@@ -20,7 +20,7 @@
     /// <summary>
     /// View model for the Output.
     /// </summary>
-    public class OutputViewModel : ToolViewModel, IOutputObserver
+    public class OutputViewModel : ToolViewModel, ILoggerObserver
     {
 
         /// <summary>

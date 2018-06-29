@@ -1,14 +1,12 @@
 ﻿namespace Squalr.Source.Debugger
 {
     using GalaSoft.MvvmLight.CommandWpf;
-    using Squalr.Engine;
-    using Squalr.Engine.Debugger;
+    using Squalr.Engine.Debuggers;
+    using Squalr.Engine.Projects;
     using Squalr.Engine.Utils;
     using Squalr.Engine.Utils.DataStructures;
     using Squalr.Source.Docking;
     using Squalr.Source.ProjectExplorer;
-    using Squalr.Source.ProjectItems;
-    using Squalr.Source.Utils.Extensions;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -158,9 +156,9 @@
         /// <param name="codeTraceResult">The code trace result to add to the project explorer.</param>
         private void AddCodeTraceResult(CodeTraceResult codeTraceResult)
         {
-            InstructionItem instructionItem = new InstructionItem(codeTraceResult.Address.ToIntPtr(), "", "nop", new Byte[] { 0x90 });
+            InstructionItem instructionItem = new InstructionItem(codeTraceResult.Address, "", "nop", new Byte[] { 0x90 });
 
-            ProjectExplorerViewModel.GetInstance().AddNewProjectItems(addToSelected: true, projectItems: instructionItem);
+            ProjectExplorerViewModel.GetInstance().AddProjectItems(instructionItem);
         }
 
         /// <summary>
@@ -175,9 +173,9 @@
             }
 
             IEnumerable<InstructionItem> projectItems = codeTraceResults.Select(
-                codeTraceEvent => new InstructionItem(codeTraceEvent.Address.ToIntPtr(), "", "nop", new Byte[] { 0x90 }));
+                codeTraceEvent => new InstructionItem(codeTraceEvent.Address, "", "nop", new Byte[] { 0x90 }));
 
-            ProjectExplorerViewModel.GetInstance().AddNewProjectItems(addToSelected: true, projectItems: projectItems);
+            ProjectExplorerViewModel.GetInstance().AddProjectItems(projectItems.ToArray());
         }
 
         private void FindWhatWrites(ProjectItem projectItem)
@@ -189,8 +187,8 @@
 
                 AddressItem addressItem = projectItem as AddressItem;
 
-                BreakpointSize size = Eng.GetInstance().Debugger.SizeToBreakpointSize((UInt32)Conversions.SizeOf(addressItem.DataType));
-                this.DebuggerCancellationTokenSource = Eng.GetInstance().Debugger.FindWhatWrites(addressItem.CalculatedAddress.ToUInt64(), size, this.CodeTraceEvent);
+                BreakpointSize size = Debugger.Default.SizeToBreakpointSize((UInt32)Conversions.SizeOf(addressItem.DataType));
+                this.DebuggerCancellationTokenSource = Debugger.Default.FindWhatWrites(addressItem.CalculatedAddress, size, this.CodeTraceEvent);
             }
         }
 
@@ -203,8 +201,8 @@
 
                 AddressItem addressItem = projectItem as AddressItem;
 
-                BreakpointSize size = Eng.GetInstance().Debugger.SizeToBreakpointSize((UInt32)Conversions.SizeOf(addressItem.DataType));
-                this.DebuggerCancellationTokenSource = Eng.GetInstance().Debugger.FindWhatReads(addressItem.CalculatedAddress.ToUInt64(), size, this.CodeTraceEvent);
+                BreakpointSize size = Debugger.Default.SizeToBreakpointSize((UInt32)Conversions.SizeOf(addressItem.DataType));
+                this.DebuggerCancellationTokenSource = Debugger.Default.FindWhatReads(addressItem.CalculatedAddress, size, this.CodeTraceEvent);
             }
         }
 
@@ -217,8 +215,8 @@
 
                 AddressItem addressItem = projectItem as AddressItem;
 
-                BreakpointSize size = Eng.GetInstance().Debugger.SizeToBreakpointSize((UInt32)Conversions.SizeOf(addressItem.DataType));
-                this.DebuggerCancellationTokenSource = Eng.GetInstance().Debugger.FindWhatAccesses(addressItem.CalculatedAddress.ToUInt64(), size, this.CodeTraceEvent);
+                BreakpointSize size = Debugger.Default.SizeToBreakpointSize((UInt32)Conversions.SizeOf(addressItem.DataType));
+                this.DebuggerCancellationTokenSource = Debugger.Default.FindWhatAccesses(addressItem.CalculatedAddress, size, this.CodeTraceEvent);
             }
         }
 
@@ -232,7 +230,7 @@
         {
             Application.Current.Dispatcher.Invoke(new Action(() =>
             {
-                CodeTraceResult result = this.Results.FirstOrDefault(results => results.Address == codeTraceInfo.Address);
+                CodeTraceResult result = this.Results.FirstOrDefault(results => results.Address == codeTraceInfo.Instruction.Address);
 
                 // Insert or increment
                 if (result != null)

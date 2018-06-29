@@ -1,20 +1,21 @@
 ﻿namespace Squalr.Engine.Networks
 {
     using Squalr.Engine.Engine.Hook;
-    using Squalr.Engine.Processes;
+    using Squalr.Engine.OS;
+    using System.Diagnostics;
 
     public class Network : INetwork, IProcessObserver
     {
         public Network()
         {
-            ProcessAdapterFactory.GetProcessAdapter().Subscribe(this);
+            Processes.Default.Subscribe(this);
         }
 
-        private Squalr.Engine.Engine.Hook.HookClient HookClient { get; set; }
+        private HookClient HookClient { get; set; }
 
-        private NormalizedProcess TargetProcess { get; set; }
+        private Process TargetProcess { get; set; }
 
-        public void Update(NormalizedProcess process)
+        public void Update(Process process)
         {
             this.TargetProcess = process;
 
@@ -31,7 +32,7 @@
             }
 
             this.HookClient = new HookClient();
-            this.HookClient?.Inject(this.TargetProcess.ProcessId);
+            this.HookClient?.Inject(this.TargetProcess.Id);
         }
 
         public void UninstallHook()

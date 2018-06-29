@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Squalr.Engine.Logging;
+using System;
 using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace Squalr.Engine.Scripting
     /// <summary>
     /// Instance of a single script.
     /// </summary>
-    public class ModScript
+    public abstract class ModScript
     {
         /// <summary>
         /// Gets or sets a cancelation request for the update loop.
@@ -30,13 +31,8 @@ namespace Squalr.Engine.Scripting
         /// </summary>
         private Task Task { get; set; }
 
-        public ModScript() : this(String.Empty)
+        public ModScript()
         {
-        }
-
-        public ModScript(String script)
-        {
-            this.SetScript(script);
         }
 
         public String Text { get; set; }
@@ -45,27 +41,12 @@ namespace Squalr.Engine.Scripting
 
         public Boolean IsActivated { get; set; }
 
+        public String CompiledAssembly { get; private set; }
+
         /// <summary>
         /// Gets or sets the compiled assembly object of a script.
         /// </summary>
         private dynamic ScriptObject { get; set; }
-
-        public static ModScript FromCompressedAssembly(String compressedAssembly)
-        {
-            ModScript modScript = new ModScript();
-            Byte[] assemblyBytes = Loader.DecompressCompiledScript(compressedAssembly);
-
-            modScript.ScriptObject = Compiler.LoadCompiledScript(assemblyBytes);
-
-            return modScript;
-        }
-
-        public async void SetScript(String script)
-        {
-            Byte[] assemblyBytes = await Task.Run(() => Compiler.CompileScript(script));
-
-            this.ScriptObject = Compiler.LoadCompiledScript(assemblyBytes);
-        }
 
         /// <summary>
         /// Runs the activation function in the script.
@@ -82,16 +63,16 @@ namespace Squalr.Engine.Scripting
                 // Call OnActivate function in the script
                 this.ScriptObject.OnActivate();
 
-                Output.Output.Log(Output.LogLevel.Info, "Script activated: " + this.Name);
+                Logger.Log(LogLevel.Info, "Script activated: " + this.Name);
             }
             catch (SecurityException ex)
             {
-                Output.Output.Log(Output.LogLevel.Error, "Invalid operation in sandbox environment", ex);
+                Logger.Log(LogLevel.Error, "Invalid operation in sandbox environment", ex);
                 return false;
             }
             catch (Exception ex)
             {
-                Output.Output.Log(Output.LogLevel.Error, "Unable to activate script", ex);
+                Logger.Log(LogLevel.Error, "Unable to activate script", ex);
                 return false;
             }
 
@@ -130,11 +111,11 @@ namespace Squalr.Engine.Scripting
 
                             if (exception.ToString().Contains("does not contain a definition for 'OnUpdate'"))
                             {
-                                Output.Output.Log(Output.LogLevel.Warn, "Optional update function not executed");
+                                Logger.Log(LogLevel.Warn, "Optional update function not executed");
                             }
                             else
                             {
-                                Output.Output.Log(Output.LogLevel.Error, "Error running update function: ", ex);
+                                Logger.Log(LogLevel.Error, "Error running update function: ", ex);
                             }
 
                             return;
@@ -152,7 +133,7 @@ namespace Squalr.Engine.Scripting
             }
             catch
             {
-                Output.Output.Log(Output.LogLevel.Error, "Error executing update loop.");
+                Logger.Log(LogLevel.Error, "Error executing update loop.");
             }
         }
 
@@ -167,7 +148,7 @@ namespace Squalr.Engine.Scripting
             {
                 this.ScriptObject.OnDeactivate();
 
-                Output.Output.Log(Output.LogLevel.Info, "Script deactivated: " + this.Name);
+                Logger.Log(LogLevel.Info, "Script deactivated: " + this.Name);
 
                 try
                 {
@@ -180,7 +161,7 @@ namespace Squalr.Engine.Scripting
             }
             catch (Exception ex)
             {
-                Output.Output.Log(Output.LogLevel.Error, "Error when deactivating script", ex);
+                Logger.Log(LogLevel.Error, "Error when deactivating script", ex);
             }
 
             return;

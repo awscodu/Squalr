@@ -1,8 +1,8 @@
 ﻿namespace Squalr.Source.Utils
 {
+    using Squalr.Engine.Logging;
     using Squalr.Engine.Utils.DataStructures;
-    using Squalr.Engine.Output;
-    using Squalr.Source.Utils.Extensions;
+    using Squalr.Engine.Utils.Extensions;
     using Svg;
     using System;
     using System.Drawing;
@@ -74,7 +74,7 @@
             }
             catch (Exception ex)
             {
-                Output.Log(LogLevel.Error, "Unable to export image", ex);
+                Logger.Log(LogLevel.Error, "Unable to export image", ex);
             }
         }
 

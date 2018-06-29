@@ -1,15 +1,11 @@
 ﻿namespace Squalr.Source.Main
 {
-    using CompilerService;
     using GalaSoft.MvvmLight.CommandWpf;
-    using Squalr.Engine;
-    using Squalr.Engine.Output;
-    using Squalr.Engine.Scripting;
-    using Squalr.Properties;
+    using Squalr.Engine.Logging;
+    using Squalr.Engine.OS;
     using Squalr.Source.ChangeLog;
     using Squalr.Source.Docking;
     using Squalr.Source.Output;
-    using Squalr.Source.ProjectExplorer;
     using System;
     using System.Threading;
     using System.Windows;
@@ -32,13 +28,23 @@
         /// </summary>
         private MainViewModel() : base()
         {
-            // Initialize the engine and register any output to our view model
-            Eng.GetInstance().Initialize(OutputViewModel.GetInstance());
+            /*
+            using (UpdateManager manager = new UpdateManager("C:\\Projects\\MyApp\\Releases"))
+            {
+                ReleaseEntry result = manager.UpdateApp().Result;
+            }*/
 
-            Output.Log(LogLevel.Info, "Squalr developer tools started");
+            // Attach our view model to the engine's output
+            Logger.Subscribe(OutputViewModel.GetInstance());
 
-            // The Engine is .NET Standard and there are no compiler libraries. Squalr compensates for this here by passing in a functional full framework compiler.
-            Compiler.OverrideCompiler(new CodeDomCompiler());
+            if (Vectors.HasVectorSupport)
+            {
+                Logger.Log(LogLevel.Info, "Hardware acceleration enabled");
+                Logger.Log(LogLevel.Info, "Vector size: " + System.Numerics.Vector<Byte>.Count);
+            }
+
+
+            Logger.Log(LogLevel.Info, "Squalr developer tools started");
 
             this.DisplayChangeLogCommand = new RelayCommand(() => ChangeLogViewModel.GetInstance().DisplayChangeLog(new Content.ChangeLog().TransformText()), () => true);
         }
@@ -73,13 +79,7 @@
         /// <param name="window">The window to close.</param>
         protected override void Close(Window window)
         {
-            if (!ProjectExplorerViewModel.GetInstance().ProjectItemStorage.PromptSave())
-            {
-                return;
-            }
-
-            SettingsViewModel.GetInstance().Save();
-            ProjectExplorerViewModel.GetInstance().DisableAllProjectItems();
+            // SolutionExplorerViewModel.GetInstance().DisableAllProjectItems();
 
             base.Close(window);
         }

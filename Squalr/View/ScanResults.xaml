@@ -8,7 +8,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:intr="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:types="clr-namespace:Squalr.Engine.DataTypes;assembly=Squalr.Engine.DataTypes"
+    xmlns:types="clr-namespace:Squalr.Engine.DataTypes;assembly=Squalr.Engine"
     x:Name="SqualrScanResults"
     d:DesignHeight="256"
     d:DesignWidth="512"
@@ -20,13 +20,14 @@
     </x:Code>
     <Grid Background="{StaticResource SqualrColorBlack}">
         <Grid.Resources>
-            <converters:IntPtrToAddressConverter x:Key="IntPtrToAddressConverter" />
+            <converters:UInt64ToAddressConverter x:Key="IntPtrToAddressConverter" />
             <converters:ValueToMetricSize x:Key="ValueToMetricSize" />
             <converters:BooleanToVisibilityConverter
                 x:Key="BooleanToHiddenConverter"
                 False="Hidden"
                 True="Visible" />
             <converters:DataTypeToIconConverter x:Key="DataTypeToIconConverter" />
+            <converters:ProjectItemToIconConverter x:Key="ProjectItemToIconConverter" />
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -369,7 +370,7 @@
                     IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Source="{Binding Path=Icon}" />
+                            <Image Source="{Binding Path=PointerItem, Converter={StaticResource ProjectItemToIconConverter}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
